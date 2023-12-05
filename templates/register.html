@@ -395,6 +395,12 @@
                 <div class="col-lg-6 offset-lg-3">
                     <div class="account-login-inner">
                         <form action="#" method="POST" class="ltn__form-box contact-form-box">
+                            {% if messages %}                            
+                            {% for message in messages %}
+                        <p style="border-left: 10px solid red; background-color: antiquewhite; padding: 20px 20px;">{{ message }}</p>
+                            {% endfor %}                           
+                            {% endif %}
+                            
                             {% csrf_token %}
                             <input type="text" required name="firstname" placeholder="First Name*">
                             <input type="text" required name="lastname" placeholder="Last Name*">

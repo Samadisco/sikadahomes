@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login,logout,authenticate
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.db.models import Q
 import re
 
 # Create your views here.
@@ -70,6 +71,8 @@ def login_view(request):
                 if user is not None:
                     login(request, user)
                     return redirect(index)
+                else:
+                    messages.error(request, "Invalid Password") 
             except:            
                 messages.error(request, "No account associated with this email")                   
         else:
@@ -111,9 +114,11 @@ def register(request):
         password = request.POST['password']
 
         try:
-            checkUserName = User.objects.get(username=phone)
+            checkUserName = User.objects.filter(Q(username=phone) | Q(email=email))
+            # checkUserName = User.objects.get(username=phone) or User.objects.get(email=email)
             print(checkUserName)
             if checkUserName is not None:
+                messages.error(request, "Phone number or email already exists") 
             # context =  {'error':'The username you entered has already been taken. Please try another username.'}
                 return render(request, 'register.html')
             
