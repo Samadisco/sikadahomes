@@ -113,16 +113,15 @@ def register(request):
         email = request.POST['email']
         password = request.POST['password']
 
-        try:
-            checkUserName = User.objects.filter(Q(username=phone) | Q(email=email))
-            # checkUserName = User.objects.get(username=phone) or User.objects.get(email=email)
-            print(checkUserName)
-            if checkUserName is not None:
-                messages.error(request, "Phone number or email already exists") 
-            # context =  {'error':'The username you entered has already been taken. Please try another username.'}
-                return render(request, 'register.html')
+        # try:
+        checkUserName = User.objects.filter(Q(username=phone) | Q(email=email))
+        if checkUserName.count() != 0:
+            messages.error(request, "Phone number or email already exists") 
+            return render(request, 'register.html')
+        else:
+            print('Here working')
             
-        except User.DoesNotExist:
+        # except User.DoesNotExist:
             user= User.objects.create_user(phone, email, password)
             user.first_name = firstname
             user.last_name = lastname
