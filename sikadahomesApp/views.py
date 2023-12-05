@@ -1,4 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import login,logout,authenticate
+from django.contrib import messages
+from django.contrib.auth.models import User
+import re
 
 # Create your views here.
 
@@ -54,8 +58,34 @@ def history(request):
 def locations(request):
     return render(request, 'locations.html')
 
-def login(request):
+def login_view(request):
+    if request.method == "POST":
+        signIn_Param = request.POST['signIn_Param']
+        password = request.POST['password']
+        regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+        if re.fullmatch(regex, signIn_Param):
+            try:
+                user = User.objects.get(email = signIn_Param)
+                user = authenticate(request, username=user.username, password=password) 
+                if user is not None:
+                    login(request, user)
+                    return redirect(index)
+            except:            
+                messages.error(request, "No account associated with this email")                   
+        else:
+            user = authenticate(request, username=signIn_Param, password=password)        
+            if user is not None:
+                login(request, user) 
+                return redirect(index)    
+            else:
+                messages.error(request, "Invalid Login Credentials")
+    
     return render(request, 'login.html')
+
+def logoutEvent(request):
+    logout(request)
+    return redirect(index)
+
 
 def order_tracking(request):
     return render(request, 'order-tracking.html')
@@ -73,6 +103,36 @@ def product_details(request):
     return render(request, 'product-details.html')
 
 def register(request):
+    if request.method == 'POST':
+        firstname = request.POST['firstname']
+        lastname = request.POST['lastname']
+        phone = request.POST['phone']
+        email = request.POST['email']
+        password = request.POST['password']
+
+        try:
+            checkUserName = User.objects.get(username=phone)
+            print(checkUserName)
+            if checkUserName is not None:
+            # context =  {'error':'The username you entered has already been taken. Please try another username.'}
+                return render(request, 'register.html')
+            
+        except User.DoesNotExist:
+            user= User.objects.create_user(phone, email, password)
+            user.first_name = firstname
+            user.last_name = lastname
+            user.save()
+
+            login(request, user)
+            return redirect(index) 
+            # return render(request, 'index.html')
+
+            # print('User created successfully')
+
+      
+        
+        # user = User.objects.create_user(phone, email, password)
+       
     return render(request, 'register.html')
 
 def service_details(request):

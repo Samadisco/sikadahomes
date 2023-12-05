@@ -52,6 +52,7 @@
                         <div class="top-bar-right text-end">
                             <div class="ltn__top-bar-menu">
                                 <ul>
+                                    
                                     <li>
                                         <!-- ltn__language-menu -->
                                         <div class="ltn__drop-menu ltn__currency-menu ltn__language-menu">
@@ -68,17 +69,33 @@
                                                 </li>
                                               <!-- user-menu -->
                                               <div class="ltn__drop-menu user-menu">
+                                                  {% if request.user.is_anonymous %}
+                                                  <ul>                                                  
+                                                    <li>
+                                                        <a href="#"><i class="icon-user"></i></a>                                                          
+                                                        <ul>                                                                                            
+                                                          <li><a href="login">Sign in</a></li>
+                                                          <li><a href="register">Register</a></li>
+                                                          <li><a href="account">My Account</a></li>
+                                                          <li><a href="wishlist">Wishlist</a></li>
+                                                        </ul>                                                                                                                                                                              
+                                                    </li>
+                                                </ul>
+                                                  
+                                                  {%else%}
                                                   <ul>
+                                                    <span>Hi, {{request.user.first_name}}</span>
                                                       <li>
-                                                          <a href="#"><i class="icon-user"></i></a>
-                                                          <ul>
-                                                              <li><a href="login">Sign in</a></li>
-                                                              <li><a href="register">Register</a></li>
-                                                              <li><a href="account">My Account</a></li>
-                                                              <li><a href="wishlist">Wishlist</a></li>
-                                                          </ul>
+                                                          <a href="#"><i class="icon-user"></i></a>                                                          
+                                                          <ul>                                                                                            
+                                                            <li><a href="account">My Account</a></li>
+                                                            <li><a href="wishlist">Wishlist</a></li>
+                                                            <li><a href="logoutEvent">Logout</a></li>
+                                                          </ul>                                                                                                                                                                              
                                                       </li>
                                                   </ul>
+                                                  
+                                                  {%endif%}
                                               </div>
                                             </ul>
                                         </div>

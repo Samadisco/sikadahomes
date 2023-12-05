@@ -103,7 +103,7 @@
                     <div class="col">
                         <div class="site-logo-wrap">
                             <div class="site-logo">
-                                <a href=""><img src="{% static 'img/logo.png' %}" alt="Logo"></a>
+                                <a href=/><img src="{% static 'img/logo.png' %}" alt="Logo"></a>
                             </div>
                             <div class="get-support clearfix d-none">
                                 <div class="get-support-icon">
@@ -122,7 +122,7 @@
                                 <div class="ltn__main-menu">
                                   <ul>
                                       <li>
-                                        <a href="">Home</a>
+                                        <a href=/>Home</a>
                                       </li>
                                       <li class="menu-icon"><a href="#">Buy</a>
                                         <ul>
@@ -277,7 +277,7 @@
         <div class="ltn__utilize-menu-inner ltn__scrollbar">
             <div class="ltn__utilize-menu-head">
                 <div class="site-logo">
-                    <a href=""><img src="{% static 'img/logo.png' %}" alt="Logo"></a>
+                    <a href=/><img src="{% static 'img/logo.png' %}" alt="Logo"></a>
                 </div>
                 <button class="ltn__utilize-close">×</button>
             </div>
@@ -290,7 +290,7 @@
             <div class="ltn__utilize-menu">
               <ul>
                   <li>
-                    <a href="">Home</a>
+                    <a href=/>Home</a>
                   </li>
                   <li class="menu-icon"><a href="#">Buy</a>
                     <ul>
@@ -394,15 +394,28 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="account-login-inner">
-                        <form action="#" class="ltn__form-box contact-form-box">
-                            <input type="text" name="email" placeholder="Email*">
+                        <form action="#" method="POST" class="ltn__form-box contact-form-box">
+                            {% if messages %}                            
+                            {% for message in messages %}
+                        <p style="border-left: 10px solid red; background-color: antiquewhite; padding: 20px 20px;">{{ message }}</p>
+                            {% endfor %}                           
+                            {% endif %}
+
+                            {% csrf_token %}
+                            <input type="text" name="signIn_Param" placeholder="Email or Phone*">
                             <input type="password" name="password" placeholder="Password*">
-                            <div class="btn-wrapper mt-0">
+                            <div class="social-login-wrapper">
+                                <img class="social-login-icon" height="50px" width="50px" src="{% static 'img/icons/google-icon.png' %}">
+                                <!-- <img onclick="PhoneClicked()" class="social-login-icon" height="50px" width="50px" src="{% static 'img/icons/telephone.png' %}"> -->
+                                <img class="social-login-icon" height="50px" width="50px" src="{% static 'img/icons/apple-logo.png' %}">
+                            </div>                        
+                            <div class="btn-wrapper mt-4">
                                 <button class="theme-btn-1 btn btn-block" type="submit">SIGN IN</button>
                             </div>
                             <div class="go-to-btn mt-20">
                                 <a  href="#" title="Forgot Password?" data-bs-toggle="modal" data-bs-target="#ltn_forget_password_modal"><small>FORGOTTEN YOUR PASSWORD?</small></a>
                             </div>
+                            
                         </form>
                     </div>
                 </div>
@@ -629,6 +642,8 @@
     <script src="{% static 'js/plugins.js' %}"></script>
     <!-- Main JS -->
     <script src="{% static 'js/main.js' %}"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/custom.js' %}"></script>
 
 </body>
 </html>
